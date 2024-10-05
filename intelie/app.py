@@ -3,45 +3,49 @@ from fastapi.responses import HTMLResponse
 import os
 import shutil
 import numpy as np
-from sklearn.externals import joblib  # For loading saved models (use joblib or pickle)
+import joblib
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Load a pre-trained Scikit-learn model (you can replace this with your trained model)
-model = joblib.load('path_to_your_model/model.pkl')  # Update with your actual model path
+# Allow CORS for frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Load the machine learning models
+model_defect = joblib.load('path_to_your_defect_model/model.pkl')  # Replace with actual path for defect model
+model_cpu = joblib.load('path_to_your_cpu_model/model.pkl')  # Replace with actual path for CPU model
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Defect Analysis API!"}
+    return {"message": "Welcome to the AI-Powered Manufacturing Assistant!"}
 
-@app.post("/upload/")
-async def upload_file(file: UploadFile = File(...)):
+@app.post("/upload/defect/")
+async def upload_defect_file(file: UploadFile = File(...)):
     try:
         upload_folder = "uploads/"
         os.makedirs(upload_folder, exist_ok=True)  # Ensure the folder exists
         file_location = os.path.join(upload_folder, file.filename)
-        
-        # Write file contents
+
+        # Save the uploaded file to the server
         with open(file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        # Example: Assuming the uploaded file is a CSV or NumPy array to be analyzed
-        # Load the data (adjust based on your actual file format)
-        data = np.load(file_location)  # Assuming data is in NumPy format
-        # If it's a CSV:
-        # data = np.genfromtxt(file_location, delimiter=',')
+        # Load the image data for defect analysis (assuming it's an image file)
+        image_data = np.load(file_location)  # Modify based on your image handling
 
-        # Run inference using the pre-loaded model
-        prediction = model.predict(data)  # Modify based on the shape of your input data
+        # Run inference using the defect analysis model
+        prediction = model_defect.predict(image_data.reshape(1, -1))  # Adjust shape as necessary
 
-        # Simulate defect analysis result based on model prediction
         if prediction == 1:  # Assuming 1 means defect found
-            defect_type = "Crack"
-            defect_description = "Large crack found on the surface."
             return {
                 "message": "Defects found! 😢",
-                "defect_type": defect_type,
-                "defect_description": defect_description,
+                "defect_details": "Crack found on the surface.",
                 "file_location": file_location
             }
         else:
@@ -49,11 +53,25 @@ async def upload_file(file: UploadFile = File(...)):
                 "message": "Good! No defects found! 😀",
                 "file_location": file_location
             }
-    
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error uploading file: {e}")
 
-# HTML route to display an upload form (optional)
+@app.post("/upload/cpu/")
+async def upload_cpu_data(cores: int, freq_mhz: float, tdp_w: float, die_size_mm2: float, transistors_m: float, process_size_nm: float):
+    try:
+        features = np.array([[cores, freq_mhz, tdp_w, die_size_mm2, transistors_m, process_size_nm]])
+        
+        # Run inference using the CPU performance model
+        cpu_mark_prediction = model_cpu.predict(features)
+
+        return {
+            "cpu_mark": float(cpu_mark_prediction[0])  # Ensure output is a float
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing CPU data: {e}")
+
 @app.get("/upload-form", response_class=HTMLResponse)
 def upload_form():
     html_content = """
@@ -73,7 +91,7 @@ def upload_form():
             .upload-container {
                 margin: 20px 0;
             }
-            input[type="file"] {
+            input[type="file"], input[type="text"], input[type="number"] {
                 padding: 10px;
                 border: 2px dashed #4cafef;
                 border-radius: 10px;
@@ -102,11 +120,21 @@ def upload_form():
     </head>
     <body>
         <h1>Upload a File for Defect Analysis</h1>
-        <form action="/upload/" enctype="multipart/form-data" method="post">
+        <form action="/upload/defect/" enctype="multipart/form-data" method="post">
             <div class="upload-container">
                 <input name="file" type="file" required>
                 <input type="submit" value="Upload">
             </div>
+        </form>
+        <h1>CPU Performance Input</h1>
+        <form action="/upload/cpu/" method="post">
+            <input type="number" name="cores" placeholder="Number of Cores" required>
+            <input type="number" name="freq_mhz" placeholder="Frequency (MHz)" required>
+            <input type="number" name="tdp_w" placeholder="TDP (W)" required>
+            <input type="number" name="die_size_mm2" placeholder="Die Size (mm^2)" required>
+            <input type="number" name="transistors_m" placeholder="Transistors (million)" required>
+            <input type="number" name="process_size_nm" placeholder="Process Size (nm)" required>
+            <input type="submit" value="Get CPU Mark">
         </form>
         <div class="result" id="result"></div>
     </body>
