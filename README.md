@@ -89,10 +89,10 @@ Scalability: Our platform is designed to be modular and adaptable across various
 By integrating AI into semiconductor testing and leveraging the Virtual Twin concept, we’re addressing inefficiencies in current manufacturing processes. This project provides a scalable and innovative solution for real-world problems, positioning it as a valuable contribution to the future of semiconductor technology.
 
 Contributors
-
-Sukhesh Kanna 
-Abhishek S B
-Ezhil Nilavan
+**Our Team: Wafers & Chips 👥**
+Sukhesh Kanna S
+Abhishek S
+B Ezhil Nilavan
 
 Feel free to contribute, raise issues, or reach out with suggestions!
 
@@ -105,5 +105,8 @@ UI:
 ![Screen Shot 2024-10-05 at 5 41 22 AM](https://github.com/user-attachments/assets/dc3dfc83-f03f-4351-9d81-c526cb4b80fb)
 
 ![Screen Shot 2024-10-05 at 6 31 41 AM](https://github.com/user-attachments/assets/daa11760-815a-4bc0-94f1-d096c22a9259)
+
+The **data analysis** and **AI model training** files are included in the repository as **Colab notebooks**. Due to interruptions while pushing the current branch, particularly involving the integration of the **Intel oneAPI key (private key)**, the latest version with those changes is pending.
+
 
 
