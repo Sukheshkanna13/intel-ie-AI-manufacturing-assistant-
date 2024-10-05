@@ -85,3 +85,6 @@ This project is licensed under the MIT License – see the LICENSE file for deta
 UI:
 ![Screen Shot 2024-10-05 at 5 41 22 AM](https://github.com/user-attachments/assets/dc3dfc83-f03f-4351-9d81-c526cb4b80fb)
 
+![Screen Shot 2024-10-05 at 6 31 41 AM](https://github.com/user-attachments/assets/daa11760-815a-4bc0-94f1-d096c22a9259)
+
+
