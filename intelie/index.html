@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI-Powered manufacturing assistant</title>
+  <title>AI-Powered Manufacturing Assistant</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -26,8 +25,8 @@
 
   <main>
     <section class="intro-section">
-      <h2>wafer testing and processing power assistant</h2>
-      <p>Upload yourdatas to test and test processing power testing, powered by Gen-AI.</p>
+      <h2>Wafer Testing and Processing Power Assistant</h2>
+      <p>Upload your data for testing, powered by Gen-AI.</p>
       <div class="upload-box">
         <input type="file" id="fileInput" multiple>
         <button id="uploadBtn">Upload Image</button>
@@ -36,9 +35,26 @@
 
     <section class="output-section">
       <h3>Processed Results</h3>
-      <div id="results">
-        <h3>results</h3>
-      </div>
+      <div id="results"></div>
+    </section>
+
+    <!-- CPU Performance Analysis Form -->
+    <section class="cpu-section">
+      <h3>CPU Performance Analysis</h3>
+      <form id="cpuForm">
+        <input type="number" placeholder="Cores" id="cores" required>
+        <input type="number" placeholder="Frequency (MHz)" id="frequency" required>
+        <input type="number" placeholder="TDP (W)" id="tdp" required>
+        <input type="number" placeholder="Die Size (mm²)" id="dieSize" required>
+        <input type="number" placeholder="Transistors (million)" id="transistors" required>
+        <input type="number" placeholder="Process Size (nm)" id="processSize" required>
+        <button type="submit">Analyze CPU</button>
+      </form>
+    </section>
+
+    <section class="cpu-output">
+      <h3>CPU Performance Result</h3>
+      <div id="cpuResult"></div>
     </section>
   </main>
 
