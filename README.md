@@ -97,7 +97,7 @@ B Ezhil Nilavan
 Feel free to contribute, raise issues, or reach out with suggestions!
 
 License
-This project is licensed under the MIT License – see the LICENSE file for details.
+This project is licensed under the GNU GPL 2.0 License and a PROPRIETARY LICENSE – see the LICENSE-DUAL file for details.
 
 
 
